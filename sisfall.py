@@ -52,9 +52,9 @@ class SisFALL():
       return self.data
 
   def save(self):
-    writeDFToS3(self.data, "sisfall_corpus.df")
+    self.s3.writeDFToS3(self.data, "sisfall_corpus.df")
 
   def load(self):
     if self.data is None:
-      self.data = readDFFromS3("sisfall_corpus.df")
+      self.data = self.s3.readDFFromS3("sisfall_corpus.df")
     return self.data
