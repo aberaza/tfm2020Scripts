@@ -35,7 +35,7 @@ class SisFALL():
     txtfiles = [os.path.join(root, name) for root, dirs, files in os.walk(self.pathname) for name in files if name.endswith((".txt"))]
 
     for filepath in txtfiles:
-      ad = create_accel_dataframe(filepath)
+      ad = self.create_accel_dataframe(filepath)
       activity, subject, trial = labels_from_path(filepath)
       isFall = activity.startswith("F")
       #print(f"{activity} ({isFall}) - {subject} - {trial}")
