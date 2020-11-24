@@ -6,9 +6,10 @@ import pandas as pd
 
 class SisFALL():
 
-  def __init__(self, path):
+  def __init__(self, path, s3Proxy):
     self.pathname = path
     self.data = None
+    self.s3 = s3Proxy
 
 
   def convert_to_accel(self, df):

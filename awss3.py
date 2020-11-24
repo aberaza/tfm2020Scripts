@@ -24,5 +24,5 @@ class S3proxy():
     return self.s3.Object(BUCKET_NAME, filename).get()['Body'].read()
 
   def readDFFromS3(self, filename):
-    return pickle.load(io.BytesIO(self.readFileFromS3(CSV_FILENAME)))
+    return pickle.load(io.BytesIO(self.readFileFromS3(filename)))
 
