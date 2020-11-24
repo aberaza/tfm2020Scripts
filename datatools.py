@@ -103,3 +103,44 @@ def splitOverlap(array,size,overlap):
           array = array[size-overlap:]
   return result #aunque nunca se llegue
 
+
+#@title #### convertSession(data)
+def convertSession(data):
+  session = data['sessionData']
+
+  acc_x = np.array(session['accelerationX'])
+  acc_y = np.array(session['accelerationY'])
+  acc_z = np.array(session['accelerationZ'])
+  acc_module = comps2module(acc_x, acc_y, acc_z)
+
+  # print(session.keys())
+
+
+  processed_session = {
+      "uid" : data['uid'],
+      "activity": ('Unknown', session['activity'])[session['activity']=='unknownActivity'],
+      "samplingRate": session.get('rate', 0) or data.get('rate', 0),
+      "trigger" : session.get('triggerMethod', '') or data.get('triggerMethod', ''),
+      "triggerValue" : session.get('triggerAccel', 0) or data.get('triggerAcceleration', 0),
+      "sensorResolution": data.get('sensorResolution', 0.00119641), # por omision: valores del Fossil Gen 3
+      "sensorMaxRange": data.get('sensorMaxRange', 384.887), # por omision: valores Fossil Gen 3
+      "data": {
+        "X": acc_x,
+        "Y": acc_y,
+        "Z" : acc_z,
+      },
+      #"acceleration_x": acc_x,
+      #"acceleration_y": acc_y,
+      #"acceleration_z" : acc_z,
+      #"acceleration_x_corr" : autocorr(acc_x),
+      #"acceleration_y_corr" : autocorr(acc_y),
+      #"acceleration_z_corr" : autocorr(acc_z),
+      #"acceleration_module": acc_module,
+      #"acceleration_module_corr": autocorr(acc_module),
+      "corr_x": freq_from_autocorr(acc_x),
+      "corr_y": freq_from_autocorr(acc_y),
+      "corr_z": freq_from_autocorr(acc_z),
+      "corr_mod": freq_from_autocorr(acc_module)
+  }
+
+  return processed_session
