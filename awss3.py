@@ -27,3 +27,13 @@ class S3proxy():
   def readDFFromS3(self, filename):
     return pickle.load(io.BytesIO(self.readFileFromS3(filename)))
 
+
+  def readFile(self, filename):
+    return self.readFileFromS3(filename)
+  def writeFile(self, content, filename):
+    return self.writeFileToS3(content, filename)
+
+  def readDF(self, filename):
+    return self.readDFFromS3(filename)
+  def writeDF(elf, ndf, filename):
+    return self.writeDFToS3(ndf, filename)
