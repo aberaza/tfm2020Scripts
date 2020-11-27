@@ -3,6 +3,9 @@
 from pandas import DataFrame
 from pandas import concat
 from sklearn.model_selection import train_test_split
+import numpy as np
+
+from mates import module, comps2module
 
 def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 	"""
@@ -83,6 +86,9 @@ def getSequences(data, window_len = 150, stride=50, stateless = True, use_module
 
 
 def getTrainData(data, X_len=100, Y_len=50, stride=-1, stateless = True, remove_from_x = True, use_module = False, test_split = 0.2):
+  """
+  data es un vector de vectroes sesión
+  """
   stride = (Y_len, stride)[stride >= 0]
   x = getSequences(data, window_len=(X_len + Y_len), stride=stride, use_module = use_module)
   # reshape
@@ -91,6 +97,9 @@ def getTrainData(data, X_len=100, Y_len=50, stride=-1, stateless = True, remove_
     x = [subseq[:-Y_len] for subseq in x]
   x,y = np.array(x).reshape(len(x), x[0].shape[0], x[0].shape[1]), np.array(y).reshape(len(y), y[0].shape[0], y[0].shape[1])
   return train_test_split(x, y, test_size = test_split)
+
+
+
 
 def splitOverlap(array,size,overlap):
   result = []
