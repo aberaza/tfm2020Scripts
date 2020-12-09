@@ -98,7 +98,15 @@ def getTrainData(data, X_len=100, Y_len=50, stride=-1, stateless = True, remove_
   x,y = np.array(x).reshape(len(x), x[0].shape[0], x[0].shape[1]), np.array(y).reshape(len(y), y[0].shape[0], y[0].shape[1])
   return train_test_split(x, y, test_size = test_split)
 
-
+def getStatelessTrainData(data, y_len=1, use_module=True, test_split=0.2):
+  '''
+  Obtiene datos de train para entrenamiento stateless de longitud igual a la secuencia menos 1
+  X=seq[0:Long-1]
+  Y=seq[1:Long]
+  '''
+  avsm =[dict2array(d, use_module) for d in data]
+  #for now return whole list of x y
+  return [x[:-y_len] for x in avsm],[y[y_len:] for y in avsm]
 
 
 def splitOverlap(array,size,overlap):
@@ -113,6 +121,13 @@ def splitOverlap(array,size,overlap):
   return result #aunque nunca se llegue
 
 
+def session_to_df(session, useModule = False):
+  df = DataFrame(session['data'])
+  if useModule:
+    df['module'] = comps2module(df.X, df.Y, df.Z)
+    df = df.module
+  return df
+
 #@title #### convertSession(data)
 def convertSession(data):
   session = data['sessionData']
@@ -120,8 +135,7 @@ def convertSession(data):
   acc_x = np.array(session['accelerationX'])
   acc_y = np.array(session['accelerationY'])
   acc_z = np.array(session['accelerationZ'])
-  acc_module = comps2module(acc_x, acc_y, acc_z)
-
+  #acc_module = comps2module(acc_x, acc_y, acc_z)
   # print(session.keys())
 
 
@@ -138,14 +152,6 @@ def convertSession(data):
         "Y": acc_y,
         "Z" : acc_z,
       },
-      #"acceleration_x": acc_x,
-      #"acceleration_y": acc_y,
-      #"acceleration_z" : acc_z,
-      #"acceleration_x_corr" : autocorr(acc_x),
-      #"acceleration_y_corr" : autocorr(acc_y),
-      #"acceleration_z_corr" : autocorr(acc_z),
-      #"acceleration_module": acc_module,
-      #"acceleration_module_corr": autocorr(acc_module),
       "corr_x": freq_from_autocorr(acc_x),
       "corr_y": freq_from_autocorr(acc_y),
       "corr_z": freq_from_autocorr(acc_z),
