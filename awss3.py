@@ -35,5 +35,5 @@ class S3proxy():
 
   def readDF(self, filename):
     return self.readDFFromS3(filename)
-  def writeDF(elf, ndf, filename):
+  def writeDF(self, ndf, filename):
     return self.writeDFToS3(ndf, filename)
