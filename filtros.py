@@ -8,7 +8,7 @@ def lpf(signal, fm=50, fc=1):
     T = 1/fm
     RC = 1/(2*np.pi*fc)
     alpha = T/(T+RC)
-    print(f"alpha: {alpha}, T: {T}, RC: {RC}")
+    #print(f"alpha: {alpha}, T: {T}, RC: {RC}")
     filtered = []
     y = 0
     for x in signal:
