@@ -2,6 +2,12 @@ import pandas as pd
 import numpy as np
 import math
 
+'''
+rmse of 2 series
+'''
+def rmse(y, pred):
+  d = np.linalg.norm(y - pred)
+  return d / np.sqrt(len(pred))
 
 def module(x, y, z):
   return math.sqrt(x*x+y*y+z*z)
