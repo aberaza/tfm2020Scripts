@@ -5,7 +5,7 @@ from pandas import concat
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-from mates import module, comps2module, rmse
+from mates import module, comps2module
 
 def series_to_supervised(data, n_in=1, n_out=1, dropnan=True):
 	"""
