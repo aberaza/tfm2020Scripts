@@ -68,13 +68,15 @@ class SaveCallback(Callback):
 class LRCallback(Callback):
   loss = None
 
-  def __init__(self, step=0, lr_history=[]):
+  def __init__(self, lrstart, lrfinal, step=0, lr_history=[]):
     super(LRCallback, self).__init__()
     self.step = step
     self.lr_history = lr_history
+    self.lrstart = lrstart
+    self.lrfinal = lrfinal
 
   def on_train_begin(self, logs=None):
-    lr = updateLR(self.model, step=self.step)
+    lr = updateLR(self.model, initialLr=self.lrstart, objectiveLr=self.lrfinal, step=self.step)
     print(f"LR {lr}")
 
   def on_epoch_end(self, epoch, logs=None):
@@ -83,11 +85,11 @@ class LRCallback(Callback):
       self.loss = eval_loss
     else:
       self.step += 1
-      lr = updateLR(self.model, step=self.step)
+      lr = updateLR(self.model, initialLr=self.lrstart, objectiveLr=self.lrfinal, step=self.step)
       print(f"LR update = {lr}")
 
 
-def updateLR(model, newLR=None, initialLr=RNN_LR, objectiveLr=RNN_MINIMUM_LR, step=0):
+def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0):
   currentLR = model.optimizer.lr.numpy()
   MaxSteps = 20
   # modelo exponencial sobre 20 steps
@@ -116,8 +118,7 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
 
     cbl = CallbackList([
       InfoCallback(statsEvery,x.shape[0]),
-      SaveCallback(name, patience, history),
-      LRCallback(step = history['lr_steps'])
+      SaveCallback(name, patience, history)
       ]+callbacks, model=model)
 
     if x.ndim == 3:
