@@ -9,6 +9,7 @@ def createHistory(keys, history=None):
       history = dict()
       history['last_step'] = 0
       history['lr_steps'] = 0
+      history['epoch'] = 0
     for key in keys:
       history[key] = []
     return history
@@ -61,11 +62,11 @@ class SaveCallback(Callback):
   wait = 0
   lr = None
 
-  def __init__(self, name, patience, history={}):
+  def __init__(self, name, patience, history=None):
     super(SaveCallback,self).__init__()
     self.name = name
     self.patience = patience
-    self.history = history
+    self.history =
 
   def on_train_begin(self, logs=None):
     self.lr = float(self.model.optimizer.lr.numpy())
@@ -75,7 +76,8 @@ class SaveCallback(Callback):
     self.history['lr'].append(elr)
     if elr != self.lr:
       self.lr = elr
-      self.history['lr_steps'] += 1
+      steps = (self.history['lr_steps'], 0)[self.history['lr_steps'] is None]
+      self.history['lr_steps'] = steps + 1
 
   def on_epoch_end(self, epoch, logs=None):
     eval_loss = logs['eval-loss']
@@ -145,7 +147,7 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
 
     if history is None:
       metric_labels = model.metrics_names
-      history = createHistory(metric_labels + ['lr', 'epoch', 'lr_steps'])
+      history = createHistory(metric_labels + ['lr', 'lr_steps'])
     else:
       initialEpoch = history['epoch'] + 1
       #updateLR(model, history['lr_steps'])
