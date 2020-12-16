@@ -1,5 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.callbacks import Callback, CallbackList
+from gdrive import saveHistory, loadHistory, saveModel, savePartialModel, readModel, readPartialModel
+from gdrive import savePlot, saveTFLiteModel
 
 
 def createHistory(keys, history=None):
