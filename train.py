@@ -106,23 +106,32 @@ class SaveCallback(Callback):
         self.model.set_weights(self.weights)
 
 class LRCallback(Callback):
-  loss = None
+  best_loss = None
+  last_loss = None
 
-  def __init__(self, lrstart, lrfinal, step=0, lr_history=[]):
+  def __init__(self, lrstart, lrfinal, step=0, lr_history=[], start_epoch=None, end_epoch = None):
     super(LRCallback, self).__init__()
     self.step = step
     self.lr_history = lr_history
     self.lrstart = lrstart
     self.lrfinal = lrfinal
+    self.start_epoch = start_epoch
+    self.end_epoch = end_epoch
+
 
   def on_train_begin(self, logs=None):
     lr = updateLR(self.model, initialLr=self.lrstart, objectiveLr=self.lrfinal, step=self.step)
     print(f"LR {lr}")
 
   def on_epoch_end(self, epoch, logs=None):
+    if start_epoch is not None and epoch < start_epoch:
+      return
+    if end_epoch is not None and epoch > end_epoch:
+      return
+      
     eval_loss = logs['eval-loss']
-    if self.loss is None or eval_loss <= self.loss:
-      self.loss = eval_loss
+    if self.last_loss is None or eval_loss <= self.last_loss:
+      self.last_loss = eval_loss
     else:
       self.step += 1
       lr = updateLR(self.model, initialLr=self.lrstart, objectiveLr=self.lrfinal, step=self.step)
