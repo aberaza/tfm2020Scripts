@@ -62,11 +62,12 @@ class SaveCallback(Callback):
   wait = 0
   lr = None
 
-  def __init__(self, name, patience, history=None):
+  def __init__(self, name, patience, history=None, restoreBestWeights=True):
     super(SaveCallback,self).__init__()
     self.name = name
     self.patience = patience
     self.history = history
+    self.restoreBestWeights = restoreBestWeights
 
   def on_train_begin(self, logs=None):
     self.lr = float(self.model.optimizer.lr.numpy())
@@ -100,7 +101,9 @@ class SaveCallback(Callback):
 
 
     def on_train_end(self, logs=None):
-      return
+      # save only best weights
+      if self.restoreBestWeights and self.wait > 0 :
+        self.model.set_weights(self.weights)
 
 class LRCallback(Callback):
   loss = None
@@ -142,7 +145,7 @@ def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0)
   return newLR
 
 
-def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data=None, history=None, initialEpoch=0, patience=5, statsEvery=20, callbacks=[]):
+def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data=None, history=None, initialEpoch=0, patience=5, statsEvery=20, callbacks=[], restoreBestWeights=True):
     best_loss, best_weights = None, None
     wait_step = 0
 
@@ -155,7 +158,7 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
 
     cbl = CallbackList([
       InfoCallback(statsEvery,x.shape[0]),
-      SaveCallback(name, patience, history)
+      SaveCallback(name, patience, history, restoreBestWeights)
       ]+callbacks, model=model)
 
     if x.ndim == 3:
@@ -220,8 +223,6 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
       '''
     cbl.on_train_end()
 
-    # save only best weights
-    model.set_weights(best_weights)
     return (model, history, best_weights)
 
 
