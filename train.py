@@ -77,6 +77,7 @@ class SaveCallback(Callback):
     if elr != self.lr:
       self.lr = elr
       steps = (self.history['lr_steps'], 0)[self.history['lr_steps'] is None]
+      print("steps", steps)
       self.history['lr_steps'] = steps + 1
 
   def on_epoch_end(self, epoch, logs=None):
@@ -147,7 +148,7 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
 
     if history is None:
       metric_labels = model.metrics_names
-      history = createHistory(metric_labels + ['lr', 'lr_steps'])
+      history = createHistory(metric_labels + ['lr'])
     else:
       initialEpoch = history['epoch'] + 1
       #updateLR(model, history['lr_steps'])
