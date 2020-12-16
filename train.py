@@ -100,7 +100,7 @@ def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0)
   # psuedo polynomial decay
   if step <= MaxSteps and step > 0:
     newLR = (initialLr - objectiveLr)*(1-step/MaxSteps)**3 + objectiveLr
-    info(f"updateLR ({step}) = {newLR}")
+    print(f"updateLR ({step}) = {newLR}")
     model.optimizer.lr = tf.Variable(newLR)
   return newLR
 
