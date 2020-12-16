@@ -1,6 +1,37 @@
 from tensorflow.keras.callbacks import Callback, CallbackList
 
 
+def createHistory(keys, history=None):
+    if history is None:
+      history = dict()
+      history['last_step'] = 0
+      history['lr_steps'] = 0
+    for key in keys:
+      history[key] = []
+    return history
+
+def populateHistory(history, newItems):
+  #add new items
+  for key, value in newItems.items():
+    if key not in history:
+      print("add key ", key)
+      history[key] = []
+    history[key].append(value)
+  history['last_step'] += 1
+  return history
+
+# Define some callbacks
+class ResetStatesCallback(Callback):
+  def __init__(self, maxLen):
+    self.counter = 0
+    self.maxLen = maxLen
+
+  def on_batch_begin(self, batch, logs={}):
+    if self.counter % self.maxLen == 0:
+      self.model.reset_states()
+      self.counter = 0 #prevent overflow
+    self.counter +=1
+
 class InfoCallback(Callback):
   epoch = -1
 
@@ -186,3 +217,5 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
     # save only best weights
     model.set_weights(best_weights)
     return (model, history, best_weights)
+
+
