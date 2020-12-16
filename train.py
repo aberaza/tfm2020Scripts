@@ -66,7 +66,7 @@ class SaveCallback(Callback):
     super(SaveCallback,self).__init__()
     self.name = name
     self.patience = patience
-    self.history =
+    self.history = history
 
   def on_train_begin(self, logs=None):
     self.lr = float(self.model.optimizer.lr.numpy())
