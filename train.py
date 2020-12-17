@@ -128,7 +128,7 @@ class LRCallback(Callback):
       return
     if end_epoch is not None and epoch > end_epoch:
       return
-      
+
     eval_loss = logs['eval-loss']
     if self.last_loss is None or eval_loss <= self.last_loss:
       self.last_loss = eval_loss
@@ -154,16 +154,18 @@ def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0)
   return newLR
 
 
-def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data=None, history=None, initialEpoch=0, patience=5, statsEvery=20, callbacks=[], restoreBestWeights=True):
+def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data=None, history=None, initialEpoch=None, patience=5, statsEvery=20, callbacks=[], restoreBestWeights=True):
     best_loss, best_weights = None, None
     wait_step = 0
-
+    #initial epoch overrides history epoch?
+    initialEpoch = (initialEpoch,0)[initialEpoch is None]
     if history is None:
       metric_labels = model.metrics_names
       history = createHistory(metric_labels + ['lr'])
     else:
       initialEpoch = history['epoch'] + 1
       #updateLR(model, history['lr_steps'])
+
 
     cbl = CallbackList([
       InfoCallback(statsEvery,x.shape[0]),
