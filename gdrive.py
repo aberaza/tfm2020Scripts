@@ -67,7 +67,7 @@ import pathlib
 
 def saveTFLiteModel(model, filename):
   tflite_dir = pathlib.Path(F'{DRIVE_MOUNT_PATH}/tflite/')
-  tflite_models_dir.mkdir(exist_ok=True, parents=True)
+  #tflite_models_dir.mkdir(exist_ok=True, parents=True)
   #model_file = tflite_dir/F"{filename}.tflite"
   #model_file.write_bytes(model)
   return open(f"{tflite_dir}{filename}.tflite", "wb").write(model)
