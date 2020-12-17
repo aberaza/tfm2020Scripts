@@ -5,6 +5,11 @@ import json
 DRIVE_MOUNT_PATH = '/content/drive/My Drive/pfmdata2020'
 GDRIVE_ACCESS = True
 
+# GLOBALS
+SISFALL_PATH = f"{DRIVE_MOUNT_PATH}/DataSets/SisFall_dataset"
+PLOTS_PATH = f"{DRIVE_MOUNT_PATH}/plots"
+TFLITE_PATH = f"{DRIVE_MOUNT_PATH}/tflite"
+
 class GDriveproxy():
   def __init__(self, mountPath):
     self.path = mountPath
@@ -15,6 +20,9 @@ class GDriveproxy():
 
 def setDrivePath(path):
   DRIVE_MOUNT_PATH = path
+  SISFALL_PATH = f"{DRIVE_MOUNT_PATH}/DataSets/SisFall_dataset"
+  PLOTS_PATH = f"{DRIVE_MOUNT_PATH}/plots"
+  TFLITE_PATH = f"{DRIVE_MOUNT_PATH}/tflite"
 def setDriveAccess(access):
   GDRIVE_ACCESS = access==True
 
