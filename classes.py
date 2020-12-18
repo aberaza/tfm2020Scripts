@@ -36,7 +36,9 @@ class ModelInterface():
 class BasicModel(ModelInterface):
   prefix=''
   def __init__(self, name, model=None, history=None):
+
     if model is None:
+      global cargar_o_crear_modelo
       model, trained, history =  cargar_o_crear_modelo(f"{self.prefix}-{name}")
 
     super(BasicModel, self).__init__(name, model)
@@ -131,35 +133,3 @@ class TrainModel(BasicModel):
     return _model
 
 
-class PruneModel(BasicModel):
-  prefix = "PRUNED"
-  def __init__(self, name, model=None, basic_model=None, history=None):
-    self.basic_model = basic_model
-    if model is None:
-      model, history = readModel(f"{self.prefix}-{name}")
-    self.history=history
-    self.trained = history is not None
-    self.name = name
-    self.model = model
-    #super(PruneModel, self).__init__(name, model, history)
-
-  def prune(self, x,y,epochs=PRUNE_EPOCHS, initialEpoch=0, validation_data=None, prune_start=0, prune_stop = 0.8, lr=0.001, patience=3, statsEvery=20):
-    if self.basic_model is None:
-      warn("Prune necesita un basic_model")
-      return
-
-    # calcular el step prune_sart y stop (dejamos 20% steps para reeducar la red)
-    batch_size = x.shape[0]
-    steps = epochs * batch_size
-    prune_start = int(prune_start * steps)
-    prune_stop = int(prune_stop * steps)
-
-    # obtener modelo prunable
-    prunable_model = get_prunable_model(self.basic_model, prune_start, prune_stop)
-    # prunearlo
-    cb = [
-          LRCallback(lr, RNN_MINIMUM_LR, step=0, start_epoch=PRUNE_LR_START),
-          sparsity.UpdatePruningStep()
-          ]
-    self.model, self.history, weights = batchTrain(prunable_model, x, y, f"{self.prefix}-{self.name}", epochs, validation_data=validation_data,
-              initialEpoch=initialEpoch, callbacks=cb, patience=epochs, restoreBestWeights=False)

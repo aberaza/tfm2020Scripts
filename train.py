@@ -240,6 +240,7 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
     return (model, history, best_weights)
 
 
+
 '''
 OPTIM:
 None -> Conversión a TFLite sin ningún cambio
@@ -284,4 +285,3 @@ def model_to_tflite(model, optim=None, dataset=None):
   # Save to disk
   #open("cifar_quant_8bit.tflite", "wb").write(tflite_model)
   return tflite_model
-  
