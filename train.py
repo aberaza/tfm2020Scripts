@@ -1,4 +1,5 @@
 import tensorflow as tf
+from tensorflow.keras import backend as K
 from tensorflow.keras.callbacks import Callback, CallbackList
 from gdrive import saveHistory, loadHistory, saveModel, savePartialModel, readModel, readPartialModel
 from gdrive import savePlot, saveTFLiteModel
@@ -70,10 +71,11 @@ class SaveCallback(Callback):
     self.restoreBestWeights = restoreBestWeights
 
   def on_train_begin(self, logs=None):
-    self.lr = float(self.model.optimizer.lr.numpy())
+    #self.lr = float(self.model.optimizer.lr.numpy())
+    self.lr = float(K.get_value(self.model.optimizer.lr))
 
   def on_epoch_begin(self, epoch, logs=None):
-    elr = float(self.model.optimizer.lr.numpy())
+    elr = float(K.get_value(self.model.optimizer.lr))#float(self.model.optimizer.lr.numpy())
     self.history['lr'].append(elr)
     if elr != self.lr:
       self.lr = elr
@@ -139,7 +141,7 @@ class LRCallback(Callback):
 
 
 def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0):
-  currentLR = model.optimizer.lr.numpy()
+  currentLR = float(K.get_value(self.model.optimizer.lr)) #model.optimizer.lr.numpy()
   MaxSteps = 20
   # modelo exponencial sobre 20 steps
   '''
@@ -150,7 +152,8 @@ def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0)
   if step <= MaxSteps and step > 0:
     newLR = (initialLr - objectiveLr)*(1-step/MaxSteps)**3 + objectiveLr
     print(f"updateLR ({step}) = {newLR}")
-    model.optimizer.lr = tf.Variable(newLR, dtype=tf.float32)
+    #model.optimizer.lr = tf.Variable(newLR, dtype=tf.float32)
+    K.set_value(model.optimizer.lr, K.get_value(newLR))
   return newLR
 
 
