@@ -150,7 +150,7 @@ def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0)
   if step <= MaxSteps and step > 0:
     newLR = (initialLr - objectiveLr)*(1-step/MaxSteps)**3 + objectiveLr
     print(f"updateLR ({step}) = {newLR}")
-    model.optimizer.lr = tf.Variable(newLR)
+    model.optimizer.lr = tf.Variable(newLR, dtype=tf.float32)
   return newLR
 
 
