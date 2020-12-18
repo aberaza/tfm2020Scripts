@@ -80,7 +80,7 @@ class LiteModel(ModelInterface):
 
 class TrainModel(BasicModel):
   prefix = "TRAIN"
-  def __init__(self, name, cell, nb_units, input_shape, output_dims, output_steps, nb_layers, bidirectional, stateful, lr=RNN_LR, encoderLength=None):
+  def __init__(self, name, cell, nb_units, input_shape, output_dims, output_steps, nb_layers, bidirectional, stateful, lr=0.001, encoderLength=None):
     self.cell = cell
     self.nb_units = nb_units
     self.input_shape = input_shape
