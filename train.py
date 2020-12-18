@@ -141,7 +141,7 @@ class LRCallback(Callback):
 
 
 def updateLR(model, newLR=None, initialLr=0.001, objectiveLr=0.00000001, step=0):
-  currentLR = float(K.get_value(self.model.optimizer.lr)) #model.optimizer.lr.numpy()
+  currentLR = float(K.get_value(model.optimizer.lr)) #model.optimizer.lr.numpy()
   MaxSteps = 20
   # modelo exponencial sobre 20 steps
   '''
