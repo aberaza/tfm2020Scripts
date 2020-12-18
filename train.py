@@ -126,9 +126,9 @@ class LRCallback(Callback):
     print(f"LR {lr}")
 
   def on_epoch_end(self, epoch, logs=None):
-    if self.start_epoch is not None and epoch < start_epoch:
+    if self.start_epoch is not None and epoch < self.start_epoch:
       return
-    if self.end_epoch is not None and epoch > end_epoch:
+    if self.end_epoch is not None and epoch > self.end_epoch:
       return
 
     eval_loss = logs['eval-loss']
