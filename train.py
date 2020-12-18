@@ -240,3 +240,48 @@ def batchTrain(model, x, y, name, epochs, validation_split=0.15, validation_data
     return (model, history, best_weights)
 
 
+'''
+OPTIM:
+None -> Conversión a TFLite sin ningún cambio
+1-> Float16 quantization.Float16 quantization reduces the model size by quantizing the model’s weight parameters to float16 bit floating-point numbers for a minimal impact on accuracy and latency. This quantization technique significantly reduces the model size by half.
+Let’s add float16 quantization of weights while convert model into TensorFlow Lite. First set the optimizations flag to default optimizations that quantize all fixed parameters such as weights. Then specify float16 is the supported type on the target platform:
+2-> Dynamic range quantization:The post-training dynamic range quantization converting model weights to 8-bit precision during model conversation from TensorFlow graphdefs to TensorFlow Lite format. Dynamic range quantization enables 4x reduction in the model size.
+The model’s activation outputs are always stored in floating-point. In dynamic range quantization, the weight parameters are quantized post-training and activation are quantized dynamically at inference.
+3-> nteger quantization. Microcontroller devices, Edge TPU performs an integer-based operation. So above generated TFLite model won’t compatible with integer-only hardware. To execute the TensorFlow model on integer-only hardware, we need to quantize all model parameters, input and output tensor to an integer.
+'''
+
+QUANT_NONE    = None
+QUANT_FLOAT16 = 1
+QUANT_DYNAMIC = 2
+QUANT_INT8    = 3
+def model_to_tflite(model, optim=None, dataset=None):
+  converter = tf.lite.TFLiteConverter.from_keras_model(model)
+  if optim is not None:
+    converter.experimental_new_converter = True
+    converter.optimizations = [tf.lite.Optimize.DEFAULT]
+  if optim == 1: # caso OPTIM_FLOAT_W_FLOAT_A y no dataset
+    converter.target_spec.supported_types = [tf.float16]
+  elif optim == 2: # caso optim = 0 y no dataset
+    None
+  elif optim == 3:
+    rep_data = tf.data.Dataset.from_tensor_slices(tf.cast(dataset, tf.float32)).batch(1)
+    def rep_dataset_gen():
+      for input in rep_data.take(200):
+        yield [input]
+    converter.representative_dataset = rep_dataset_gen
+    converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
+    converter.inference_input_type = tf.int8
+    converter.inference_output_type = tf.float32
+  elif optim == 4:
+    rep_data = tf.data.Dataset.from_tensor_slices(tf.cast(dataset, tf.float32)).batch(1)
+    def rep_dataset_gen():
+      for input in rep_data.take(200):
+        yield [input]
+    converter.representative_dataset = rep_dataset_gen
+    converter.target_spec.supported_ops = [tf.lite.OpsSet.EXPERIMENTAL_TFLITE_BUILTINS_ACTIVATIONS_INT16_WEIGHTS_INT8, tf.lite.OpsSet.TFLITE_BUILTINS]
+
+  tflite_model = converter.convert()
+  # Save to disk
+  #open("cifar_quant_8bit.tflite", "wb").write(tflite_model)
+  return tflite_model
+  
