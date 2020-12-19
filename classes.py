@@ -1,3 +1,6 @@
+import tensorflow as tf
+import numpy as np
+
 from train import model_to_tflite
 from gdrive import saveModel
 
@@ -52,6 +55,7 @@ class BasicModel(ModelInterface):
     saveModel(self.model, f"{self.prefix}-{self.name}", self.history)
 
 OPTIM_NAMES = ('', 'FLOAT16', 'DYNAMIC', 'INT')
+
 class LiteModel(ModelInterface):
   prefix='LITE'
   def __init__(self, name, model=None, keras_model=None, optim=0):
@@ -94,6 +98,7 @@ class TrainModel(BasicModel):
     self.lr = lr
     self.encoderLength = encoderLength
 
+    global cargar_o_crear_modelo
     _model, self.isTrained, _history = cargar_o_crear_modelo(f"{self.prefix}-{name}", nb_units, input_shape, output_dims, output_steps, nb_layers, stateful, bidirectional, cell, True, lr, encoderLength)
     info(f"Model is trained {self.isTrained}")
     if self.isTrained is False:
