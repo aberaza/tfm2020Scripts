@@ -3,6 +3,7 @@ import numpy as np
 
 from train import model_to_tflite
 from gdrive import saveModel
+from mates import rmse
 
 
 class DetectorInterface:
