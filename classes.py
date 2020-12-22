@@ -83,7 +83,7 @@ class LiteModel(ModelInterface):
     return output_data
 
   def save(self):
-    saveTFLiteModel(self.model, f"{prefix}-{name}-{OPTIM_NAMES[optim]}")
+    saveTFLiteModel(self.model, f"{self.prefix}-{name}-{OPTIM_NAMES[optim]}")
 
 class TrainModel(BasicModel):
   prefix = "TRAIN"
