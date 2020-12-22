@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 
 from train import model_to_tflite
-from gdrive import saveModel
+from gdrive import saveModel, saveTFLiteModel
 from mates import rmse
 
 
