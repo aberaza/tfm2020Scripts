@@ -60,6 +60,7 @@ OPTIM_NAMES = ('', 'FLOAT16', 'DYNAMIC', 'INT')
 class LiteModel(ModelInterface):
   prefix='LITE'
   def __init__(self, name, model=None, keras_model=None, optim=0):
+    self.optim = optim
     if keras_model is not None:
       model = model_to_tflite(keras_model, optim=optim)
     if model is not None:
@@ -83,7 +84,7 @@ class LiteModel(ModelInterface):
     return output_data
 
   def save(self):
-    saveTFLiteModel(self.model, f"LITE-{self.name}-{OPTIM_NAMES[optim]}")
+    saveTFLiteModel(self.model, f"LITE-{self.name}-{OPTIM_NAMES[self.optim]}")
 
 class TrainModel(BasicModel):
   prefix = "TRAIN"
