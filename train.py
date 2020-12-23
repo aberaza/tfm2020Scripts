@@ -97,9 +97,9 @@ class SaveCallback(Callback):
       self.wait+=1
       if self.wait >= self.patience :
         print(f"\rpatience superseeded: stopping...", end='')
-        self.model.stop_training = True
         print(f"\t restore best weights...")
         self.model.set_weights(self.weights)
+        self.model.stop_training = True 
 
 
     def on_train_end(self, logs=None):
@@ -132,11 +132,12 @@ class LRCallback(Callback):
       return
 
     eval_loss = logs['eval-loss']
-    if self.last_loss is None or eval_loss <= self.last_loss:
+    if self.last_loss is None or eval_loss < self.last_loss:
       self.last_loss = eval_loss
     else:
       self.step += 1
       lr = updateLR(self.model, initialLr=self.lrstart, objectiveLr=self.lrfinal, step=self.step)
+      self.last_loss = eval_loss
       print(f"LR update = {lr}")
 
 
