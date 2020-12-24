@@ -96,17 +96,20 @@ def savePlot(name, fig=None, figsize=(6,4)):
   print(f"Save plot to {pathname}")
 
   import matplotlib.pyplot as plt
-  params = {"pgf.texsystem": "pdflatex",
+  params = {
+    "pgf.texsystem": "pdflatex",
     "figure.figsize": figsize,
     "pgf.preamble": [
          r"\usepackage[utf8x]{inputenc}",
          r"\usepackage[T1]{fontenc}",
          r"\usepackage{cmbright}",
+         "\\usepackage{metalogo}",
          ]
   }
   plt.rcParams.update(params)
 
   # alternativa bbox_inches=extent1
+  ((fig,plt)[fig is None]).savefig(f"{pathname}.png", format="png", bbox_inches='tight', dpi=72)
 
   ((fig,plt)[fig is None]).savefig(pathname, format="pgf", bbox_inches='tight', dpi=72)
 
