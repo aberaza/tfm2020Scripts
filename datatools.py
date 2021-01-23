@@ -135,7 +135,7 @@ def convertSession(data):
   acc_x = np.array(session['accelerationX'])
   acc_y = np.array(session['accelerationY'])
   acc_z = np.array(session['accelerationZ'])
-  #acc_module = comps2module(acc_x, acc_y, acc_z)
+  # acc_module = comps2module(acc_x, acc_y, acc_z)
   # print(session.keys())
 
 
@@ -156,6 +156,5 @@ def convertSession(data):
       "corr_y": freq_from_autocorr(acc_y),
       "corr_z": freq_from_autocorr(acc_z)
   }
-  #"corr_mod": freq_from_autocorr(acc_module)
 
   return processed_session
