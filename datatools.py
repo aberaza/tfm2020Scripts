@@ -154,8 +154,8 @@ def convertSession(data):
       },
       "corr_x": freq_from_autocorr(acc_x),
       "corr_y": freq_from_autocorr(acc_y),
-      "corr_z": freq_from_autocorr(acc_z),
-      "corr_mod": freq_from_autocorr(acc_module)
+      "corr_z": freq_from_autocorr(acc_z)
   }
+  #"corr_mod": freq_from_autocorr(acc_module)
 
   return processed_session
