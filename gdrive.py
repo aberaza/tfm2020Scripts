@@ -91,7 +91,7 @@ def getTFLiteInterpeter(filename=None, model=None):
 
   return interpreter
 
-def savePlot(name, fig=None, figsize=(6,4)):
+def savePlot(name, fig=None, figsize=(6,4), savePng=True):
   pathname = f"{PLOTS_PATH}/{name}"
   print(f"Save plot to {pathname}")
 
@@ -109,7 +109,8 @@ def savePlot(name, fig=None, figsize=(6,4)):
   plt.rcParams.update(params)
 
   # alternativa bbox_inches=extent1
-  ((fig,plt)[fig is None]).savefig(f"{pathname}.png", format="png", bbox_inches='tight', dpi=72)
+  if savePng is True :
+    ((fig,plt)[fig is None]).savefig(f"{pathname}.png", format="png", bbox_inches='tight', dpi=72)
 
   ((fig,plt)[fig is None]).savefig(pathname, format="pgf", bbox_inches='tight', dpi=72)
 
