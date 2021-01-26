@@ -3,6 +3,8 @@ import seaborn as sns
 import matplotlib
 import numpy as np
 
+from gdrive import savePlot
+
 sns.set()
 matplotlib.rcParams['figure.figsize'] = [17, 12]
 
@@ -61,7 +63,7 @@ def plot_compare_many(series, names, xLabel='x', yLabel='y', xScale='linear', yS
   plt.show()
   '''
 
-def plot_separate_many(series, names, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None, separate=True):
+def plot_separate_many(series, names, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None, separate=True, saveFile=None):
   fig, axes = plt.subplots(len(series), sharex=True)
   color = iter(plt.cm.rainbow(np.linspace(0, 1, len(names))))
   legend = [];
@@ -86,8 +88,10 @@ def plot_separate_many(series, names, xLabel='x', yLabel='y', xScale='linear', y
 
   #for axe in axes.flat:
   #  axe.label_outer()
-
-  plt.show()
+  if saveFile is not None:
+    savePlot(saveFile, plt, (8, 6))
+  else:
+    plt.show()
 
 
 def df_plot(df, useIndex=False, separate=False, applyFunc=None, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None):
