@@ -105,7 +105,7 @@ def plot_separate_many(series, names, xLabel='x', yLabel='y', xScale='linear', y
     plt.show()
 
 
-def df_plot(df, useIndex=False, separate=False, applyFunc=None, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None):
+def df_plot(df, useIndex=False, separate=False, applyFunc=None, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None, saveFile=None):
   series=[]
   names=[]
   idxName=df.index.name
@@ -122,26 +122,32 @@ def df_plot(df, useIndex=False, separate=False, applyFunc=None, xLabel='x', yLab
     indexes = df[idxName]
 
   if separate == True :
-    plot_separate_many(series, names, xLabel, yLabel, xScale, yScale, indexes)
+    plot_separate_many(series, names, xLabel, yLabel, xScale, yScale, indexes, saveFile=saveFile)
   else :
-    plot_compare_many(series, names, xLabel, yLabel, xScale, yScale, indexes)
+    plot_compare_many(series, names, xLabel, yLabel, xScale, yScale, indexes, saveFile=saveFile)
 
 
-def plotSeries(df):
+def plotSeries(df, saveFile=None):
   #df.modulo.plot(linewidth=2.0, label="Modulo")
   df[['modulo','X', 'Y', 'Z']].plot(subplots=True, style=LS)
   plt.xlabel("Tiempo(segundos)")
   plt.ylabel("Aceleración")
-  plt.show()
+  if saveFile is not None:
+    savePlot(saveFile, plt, (8, 6))
+  else:
+    plt.show()
 
 def plotAutocor(df):
-  plt.psd(df.modulo, linewidth=2.0, label="Modulo", linestyle=LS['modulo'])
+  plt.psd(df.modulo, linewidth=2.0, label="Modulo", linestyle=LS['modulo'], saveFile=None)
   plt.psd(df.X, label="X", linestyle=LS['X'])
   plt.psd(df.Y, label="Y", linestyle=LS['Y'])
   plt.psd(df.Z, label="Z", linestyle=LS['Z'])
-  plt.show()
+  if saveFile is not None:
+    savePlot(saveFile, plt, (8, 6))
+  else:
+    plt.show()
 
-def plotFFT(df, length, zoom=2, samplingRate=50):
+def plotFFT(df, length, zoom=2, samplingRate=50, saveFile=None):
   df_plot(df, applyFunc=lambda x : np.fft.rfft(x,norm="ortho")[0:length//zoom],
           xLabel='Freq (Hz)', yLabel='Power', yScale='log',
           indexes=np.fft.rfftfreq(length, d=1./samplingRate)[0:length//zoom])
