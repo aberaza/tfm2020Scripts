@@ -8,6 +8,13 @@ from gdrive import savePlot
 sns.set()
 matplotlib.rcParams['figure.figsize'] = [17, 12]
 
+LS = {
+    'modulo':'k-',
+    'X':'r--',
+    'Y':'g--',
+    'Z':'b--'
+}
+
 def plot_compare_many(series, names, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None, cols=1, rows=1, saveFile=None):
   fig, axes = plt.subplots(rows, cols)
   color = iter(plt.cm.rainbow(np.linspace(0, 1, len(names))))
