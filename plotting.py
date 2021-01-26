@@ -146,6 +146,9 @@ def plotAutocor(df, saveFile=None):
   plt.psd(df.X, label="X", **{'color':'red', 'linestyle':'--'})
   plt.psd(df.Y, label="Y", **{'color':'green', 'linestyle':'--'})
   plt.psd(df.Z, label="Z", **{'color':'blue', 'linestyle':'--'})
+  plt.xlabel("Tiempo(s)")
+  plt.ylabel("Autocorrelación")
+  plt.legend()
   if saveFile is not None:
     savePlot(saveFile, plt, (8, 6))
   else:
