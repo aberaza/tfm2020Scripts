@@ -138,10 +138,10 @@ def plotSeries(df, saveFile=None):
     plt.show()
 
 def plotAutocor(df, saveFile=None):
-  plt.psd(df.modulo, linewidth=2.0, label="Modulo", linestyle=LS['modulo'], saveFile=None)
-  plt.psd(df.X, label="X", linestyle=LS['X'])
-  plt.psd(df.Y, label="Y", linestyle=LS['Y'])
-  plt.psd(df.Z, label="Z", linestyle=LS['Z'])
+  plt.psd(df.modulo, linewidth=2.0, label="Modulo", **{'color':'black', 'linestyle':'-'})
+  plt.psd(df.X, label="X", **{'color':'red', 'linestyle':'--'})
+  plt.psd(df.Y, label="Y", **{'color':'green', 'linestyle':'--'})
+  plt.psd(df.Z, label="Z", **{'color':'blue', 'linestyle':'--'})
   if saveFile is not None:
     savePlot(saveFile, plt, (8, 6))
   else:
