@@ -143,7 +143,7 @@ def plotSeries(df, saveFile=None):
 
 def plotAutocor(df, saveFile=None):
   plt.psd(df.modulo, **{'linewidth':2.5, 'label': r'$|\vec{A}|$'})
-  plt.psd(df.X, label="X",  **{'linewidth':0.5, 'alpha': 0.6, 'label': 'X'})
+  plt.psd(df.X, **{'linewidth':0.5, 'alpha': 0.6, 'label': 'X'})
   plt.psd(df.Y, **{'linewidth':0.5, 'alpha': 0.6, 'label': 'Y'})
   plt.psd(df.Z, **{'linewidth':0.5, 'alpha': 0.6, 'label': 'Z'})
   plt.xlabel("Tiempo(s)")
