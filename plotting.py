@@ -137,7 +137,7 @@ def plotSeries(df, saveFile=None):
   else:
     plt.show()
 
-def plotAutocor(df):
+def plotAutocor(df, saveFile=None):
   plt.psd(df.modulo, linewidth=2.0, label="Modulo", linestyle=LS['modulo'], saveFile=None)
   plt.psd(df.X, label="X", linestyle=LS['X'])
   plt.psd(df.Y, label="Y", linestyle=LS['Y'])
