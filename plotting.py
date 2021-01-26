@@ -75,6 +75,7 @@ def plot_compare_many(series, names, xLabel='x', yLabel='y', xScale='linear', yS
   '''
 
 def plot_separate_many(series, names, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None, separate=True, saveFile=None):
+  plt.figure(figsize=(8,6), dpi=80)
   fig, axes = plt.subplots(len(series), sharex=True)
   color = iter(plt.cm.rainbow(np.linspace(0, 1, len(names))))
   legend = [];
@@ -101,6 +102,7 @@ def plot_separate_many(series, names, xLabel='x', yLabel='y', xScale='linear', y
   #  axe.label_outer()
   if saveFile is not None:
     savePlot(saveFile, plt, (8, 6))
+    plt.show()
   else:
     plt.show()
 
@@ -130,8 +132,10 @@ def df_plot(df, useIndex=False, separate=False, applyFunc=None, xLabel='x', yLab
 def plotSeries(df, saveFile=None):
   #df.modulo.plot(linewidth=2.0, label="Modulo")
   df[['modulo','X', 'Y', 'Z']].plot(subplots=True, style=LS)
+  plt.figure(figsize=(8,6), dpi=80)
   plt.xlabel("Tiempo(segundos)")
   plt.ylabel("Aceleración")
+
   if saveFile is not None:
     savePlot(saveFile, plt, (8, 6))
   else:
@@ -150,4 +154,4 @@ def plotAutocor(df, saveFile=None):
 def plotFFT(df, length, zoom=2, samplingRate=50, saveFile=None):
   df_plot(df, applyFunc=lambda x : np.fft.rfft(x,norm="ortho")[0:length//zoom],
           xLabel='Freq (Hz)', yLabel='Power', yScale='log',
-          indexes=np.fft.rfftfreq(length, d=1./samplingRate)[0:length//zoom])
+          indexes=np.fft.rfftfreq(length, d=1./samplingRate)[0:length//zoom], saveFile=saveFile)
