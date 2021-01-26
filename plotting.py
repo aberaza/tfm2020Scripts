@@ -8,7 +8,7 @@ from gdrive import savePlot
 sns.set()
 matplotlib.rcParams['figure.figsize'] = [17, 12]
 
-def plot_compare_many(series, names, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None, cols=1, rows=1):
+def plot_compare_many(series, names, xLabel='x', yLabel='y', xScale='linear', yScale='linear', indexes=None, cols=1, rows=1, saveFile=None):
   fig, axes = plt.subplots(rows, cols)
   color = iter(plt.cm.rainbow(np.linspace(0, 1, len(names))))
   legend = [];
@@ -46,6 +46,10 @@ def plot_compare_many(series, names, xLabel='x', yLabel='y', xScale='linear', yS
       axe.plot(indexes, serie, color=graph_color, label=name)
       legend.append(name)
 
+    if saveFile is not None:
+      savePlot(saveFile, plt, (8, 6))
+    else:
+      plt.show()
   '''
     if indexes is None :
       plt.plot(serie, color=graph_color)
