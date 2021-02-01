@@ -52,8 +52,12 @@ class BasicModel(ModelInterface):
   def predict(self, data):
     return self.model.predict(np.expand_dims(data, axis=0), batch_size=1)
 
-  def save(self):
-    saveModel(self.model, f"{self.prefix}-{self.name}", self.history)
+  def save(self, format=None):
+    if format is None:
+      saveModel(self.model, f"{self.prefix}-{self.name}", self.history)
+    else:
+      saveModel(self.model, f"{self.prefix}-{self.name}", self.history, format='h5')
+
 
 OPTIM_NAMES = ('', 'FLOAT16', 'DYNAMIC', 'INT')
 

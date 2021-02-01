@@ -50,13 +50,13 @@ def loadHistory(filename):
     TF MODELS
 '''
 
-def saveModel(model, filename, history=None, include_optimizer=True):
+def saveModel(model, filename, history=None, include_optimizer=True, format='tf'):
   if not GDRIVE_ACCESS:
     print("No access to GDRIVE, cannot save")
     return None
   fullpath = F'{DRIVE_MOUNT_PATH}/{filename}'
   print(f'Saving {fullpath}...')
-  save_model(model, fullpath, overwrite = True)
+  save_model(model, fullpath, overwrite = True, save_format=format)
 
   if history is not None:
     saveHistory(history, filename)
